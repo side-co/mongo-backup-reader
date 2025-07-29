@@ -2,12 +2,21 @@ Extract your wiredTiger backup
 
 go to the folder where all the *.wt files are
 
-`docker run --name mongodb -d -p 27017:27017 -v $(pwd):/data/db side/mongo:<version>`
+`docker run --rm --name mongodb -d -p 27017:27017 -v $(pwd):/data/db side/mongo:7.0`
 
-After that you' ll be able to exec into the container to query the data `docker exec -ti mongodb sh`
+After starting the container, you can connect with the MongoDB shell directly:
 
-e.g: `mongo`
+```
+docker exec -ti mongodb mongosh
 
-`use <your db>`
+use <your db>
+db.<yourcollection>.find()
+```
 
-`db.<yourcollection>.find()`
+Starting for mongo 7.0 you should use mongosh
+
+```
+docker exec -ti mongodb mongosh
+use <your db>
+db.<yourcollection>.find()
+```

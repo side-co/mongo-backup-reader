@@ -1,24 +1,29 @@
-## MongoDB 5.0 Community Edition supports the following 64-bit Ubuntu LTS (long-term support) releases on x86_64 architecture:
-## 20.04 LTS ("Focal")
-## 18.04 LTS ("Bionic")
-FROM ubuntu:focal
+FROM ubuntu:bionic
 
-RUN apt-get update && apt-get install -y gnupg curl wget
+RUN apt-get update && apt-get install -y \
+	curl \
+	gnupg \
+	wget && \
+	rm -rf /var/lib/apt/lists/*
 
+# Add MongoDB 7.0 GPG key
+RUN wget -qO - https://pgp.mongodb.com/server-7.0.asc | apt-key add -
 
-RUN curl -fsSL https://www.mongodb.org/static/pgp/server-5.0.asc | \
-   gpg -o /usr/share/keyrings/mongodb-server-5.0.gpg \
-   --dearmor
-
-RUN echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-5.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+# Add MongoDB 7.0 repository for Ubuntu bionic
+RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 
 RUN apt-get update && apt-get upgrade -y
 
-## Install required Libssl version
+# Install MongoDB 7.0
+RUN apt-get install -y \
+    'mongodb-org=7.0*' \
+    'mongodb-org-mongos=7.0*' \
+    'mongodb-org-server=7.0*' \
+    'mongodb-org-shell=7.0*' \
+    'mongodb-org-tools=7.0*'
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb && dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb && rm *.deb
-
-RUN apt-get install -y mongodb-org=5.0.5
+RUN mkdir -p /data/db && \
+    ln -s /usr/bin/mongosh /usr/bin/mongo
 
 EXPOSE 27017
 
