@@ -8,7 +8,10 @@ After starting the container, you can connect with the MongoDB shell directly:
 
 ```
 docker exec -ti mongodb mongosh
+or 
+docker exec -ti mongodb sh
 
+mongo
 use <your db>
 db.<yourcollection>.find()
 ```
