@@ -1,7 +1,7 @@
 ## MongoDB 5.0 Community Edition supports the following 64-bit Ubuntu LTS (long-term support) releases on x86_64 architecture:
 ## 20.04 LTS ("Focal")
 ## 18.04 LTS ("Bionic")
-FROM ubuntu:focal
+FROM ubuntu:noble
 
 RUN apt-get update && apt-get install -y gnupg curl wget
 
